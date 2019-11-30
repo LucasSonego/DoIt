@@ -8,6 +8,8 @@ package br.ufpr.doit.conexao;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -160,5 +162,41 @@ public class Task_RN {
             throw new Exception("falha ao buscar pelo PK da task em task: \n" + e.getMessage());
         }
     }
+    
+    
+    public boolean listarTasksBD(List<Task> tasks) throws Exception {
 
+        Task task = new Task();
+        
+        String sql = "SELECT `PK_task`, `nome`, `descricao`, `concluida`, `data_inicio`,"
+                + " `data_fim`, `tempo_execucao`, `FK_list` FROM `task`";
+
+        try {
+            con = new Conexao();
+            PreparedStatement stm = con.getConexaoMySQL().prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            
+
+            while (rs.next()){
+                task = new Task();
+                task.setPK_task(rs.getString("PK_task"));
+                task.setNome(rs.getString("nome"));
+                task.setDescricao(rs.getString("descricao"));
+                task.setConcluida(rs.getString("concluida"));
+                task.setData_inicio(rs.getString("data_inicio"));
+                task.setData_fim(rs.getString("data_fim"));
+                task.setTempo_execucao(rs.getString("tempo_execucao"));
+                task.setFK_list(rs.getString("FK_list"));
+                tasks.add(task);
+            }
+          
+
+            stm.close();
+
+            return true;
+
+        } catch (SQLException e) {
+            throw new Exception("falha ao listar as tasks em task: \n" + e.getMessage());
+        }
+    }
 }
