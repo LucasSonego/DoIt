@@ -10,8 +10,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -67,13 +65,13 @@ public class Conexao {
 
             return (java.sql.Connection) connection;
 
-        }catch (ClassNotFoundException e) {  //Driver não encontrado
- 
+        } catch (ClassNotFoundException e) {  //Driver não encontrado
+
             System.out.println("O driver expecificado nao foi encontrado.");
- 
+
             return null;
- 
-        }catch (SQLException e) {
+
+        } catch (SQLException e) {
 
 //Não conseguindo se conectar ao banco
             System.out.println("Nao foi possivel conectar ao Banco de Dados.");
@@ -82,10 +80,8 @@ public class Conexao {
 
         }
         //Driver não encontrado
-        
-        //Driver não encontrado
-        
 
+        //Driver não encontrado
     }
 
     //Método que retorna o status da sua conexão//
@@ -120,6 +116,5 @@ public class Conexao {
         return Conexao.getConexaoMySQL();
 
     }
-    
 
 }
