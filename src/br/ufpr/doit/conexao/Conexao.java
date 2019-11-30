@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -38,7 +40,7 @@ public class Conexao {
             Class.forName(driverName);
 
 // Configurando a nossa conexão com um banco de dados//
-            String serverName = "127.0.0.1:3307";    //caminho do servidor do BD
+            String serverName = "localhost:3307";    //caminho do servidor do BD
 
             String mydatabase = "doit";        //nome do seu banco de dados
 
@@ -66,8 +68,6 @@ public class Conexao {
             return (java.sql.Connection) connection;
 
         }catch (ClassNotFoundException e) {  //Driver não encontrado
- 
-  
  
             System.out.println("O driver expecificado nao foi encontrado.");
  
@@ -120,5 +120,6 @@ public class Conexao {
         return Conexao.getConexaoMySQL();
 
     }
+    
 
 }
