@@ -10,6 +10,7 @@ package br.ufpr.doit.model;
  * @author ulisses
  */
 public class Lista {
+
     private String PK_List;
     private String nome;
     private String FK_user;

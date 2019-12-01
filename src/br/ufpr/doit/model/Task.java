@@ -10,6 +10,7 @@ package br.ufpr.doit.model;
  * @author ulisses
  */
 public class Task {
+
     private String PK_task;
     private String nome;
     private String descricao;
@@ -17,7 +18,7 @@ public class Task {
     private String data_inicio;
     private String data_fim;
     private String tempo_execucao;
-    private String FK_list;    
+    private String FK_list;
 
     public String getPK_task() {
         return PK_task;
@@ -82,5 +83,5 @@ public class Task {
     public void setFK_list(String FK_list) {
         this.FK_list = FK_list;
     }
-    
+
 }

@@ -44,11 +44,12 @@ public class TaskRN {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
-            return true;
         }
+        return true;
     }
 
     public boolean deletar(Task task) throws Exception {
@@ -66,11 +67,12 @@ public class TaskRN {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
-            return true;
         }
+        return true;
     }
 
     public boolean alterar(Task task) throws Exception {
@@ -100,12 +102,13 @@ public class TaskRN {
             stm.execute();
 
         } catch (SQLException e) {
-            throw new Exception("falha ao alterar em task: \n" + e.getMessage());
+            e.printStackTrace();
+            return false;
         } finally {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
-            return true;
         }
+        return true;
     }
 
     public boolean buscarNome(Task task) throws Exception {
@@ -138,11 +141,12 @@ public class TaskRN {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
-            return true;
         }
+        return true;
     }
 
     public boolean buscarPkTask(Task task) throws Exception {
@@ -175,11 +179,12 @@ public class TaskRN {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
-            return true;
         }
+        return true;
     }
 
     public boolean listarTasksBD(List<Task> tasks) throws Exception {
@@ -213,10 +218,11 @@ public class TaskRN {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
-            return true;
         }
+        return true;
     }
 }

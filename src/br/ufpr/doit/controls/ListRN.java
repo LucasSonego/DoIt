@@ -39,11 +39,12 @@ public class ListRN {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
-            return true;
         }
+        return true;
     }
 
     public boolean deletar(Lista list) throws Exception {
@@ -61,11 +62,12 @@ public class ListRN {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
-            return true;
         }
+        return true;
     }
 
     public boolean alterar(Lista list) throws Exception {
@@ -89,11 +91,12 @@ public class ListRN {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
-            return true;
         }
+        return true;
     }
 
     public boolean buscarNome(Lista list) throws Exception {
@@ -121,11 +124,12 @@ public class ListRN {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
-            return true;
         }
+        return true;
     }
 
     public boolean buscarPkList(Lista list) throws Exception {
@@ -152,11 +156,12 @@ public class ListRN {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
-            return true;
         }
+        return true;
     }
 
     public boolean listarListsBD(List<Lista> lists) throws Exception {
@@ -184,10 +189,11 @@ public class ListRN {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
-            return true;
         }
+        return true;
     }
 }
