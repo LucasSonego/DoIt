@@ -1,9 +1,11 @@
+package br.ufpr.doit.utils;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.ufpr.doit.conexao;
+
 
 import java.sql.Connection;
 
@@ -11,17 +13,19 @@ import java.sql.DriverManager;
 
 import java.sql.SQLException;
 
+import java.sql.PreparedStatement;
+
 /**
  *
  * @author ulisses
  */
 //Início da classe de conexão//
-public class Conexao {
+public class ConnectionFactory {
 
     public static String status = "Nao conectado";
 
 //Método Construtor da Classe//
-    public Conexao() {
+    public ConnectionFactory() {
 
     }
 
@@ -79,9 +83,18 @@ public class Conexao {
             return null;
 
         }
-        //Driver não encontrado
+    }
 
-        //Driver não encontrado
+    public static PreparedStatement prepareStmt(Connection con, String sql) throws SQLException {
+        PreparedStatement pstmt = null;
+        pstmt = con.prepareStatement(sql);
+        return pstmt;
+    }
+    
+    public static void closePstmt(PreparedStatement pstmt) throws SQLException {
+        if (pstmt != null) {
+            pstmt.close();
+        }
     }
 
     //Método que retorna o status da sua conexão//
@@ -96,7 +109,7 @@ public class Conexao {
 
         try {
 
-            Conexao.getConexaoMySQL().close();
+            ConnectionFactory.getConexaoMySQL().close();
 
             return true;
 
@@ -113,7 +126,7 @@ public class Conexao {
 
         FecharConexao();
 
-        return Conexao.getConexaoMySQL();
+        return ConnectionFactory.getConexaoMySQL();
 
     }
 
