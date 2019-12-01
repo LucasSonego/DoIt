@@ -5,36 +5,37 @@
  */
 package app;
 
-import br.ufpr.doit.controls.ListRN;
-import br.ufpr.doit.model.Lista;
-import java.util.ArrayList;
-import java.util.List;
+import br.ufpr.doit.controls.UserRN;
+import br.ufpr.doit.model.Task;
 
 public class App {
 
     public static void main(String[] args) throws Exception {
         System.out.println("Just Do It!");
-        Lista list = new Lista();
-        ListRN listRN = new ListRN();
-        List<Lista> listas = new ArrayList<>();
-        
-//        list.setPK_List("61");
-//        list.setNome("entrete");
-//        list.setFK_user("1");
-        
-        System.out.println(listRN.listarListsBD(listas));
-        
-        list = listas.get(0);
-        System.out.println(list.getPK_List());
-        System.out.println(list.getNome());
-        System.out.println(list.getFK_user());
-        list = listas.get(1);
-        System.out.println(list.getPK_List());
-        System.out.println(list.getNome());
-        System.out.println(list.getFK_user());
-        list = listas.get(2);
-        System.out.println(list.getPK_List());
-        System.out.println(list.getNome());
-        System.out.println(list.getFK_user());
+
+        UserRN userRN = new UserRN();
+
+        userRN.listarTasksConcluidas();
+
+        Task task = userRN.tasksConcluidas.get(0);
+
+        System.out.println(task.getNome());
+
+        task = userRN.tasksConcluidas.get(1);
+
+        System.out.println(task.getNome());
+
+        int x = userRN.tasksConcluidas.size();
+
+        System.out.println(x);
+
+        task = userRN.tasksConcluidas.get(2);
+
+        System.out.println(task.getNome());
+
+        task = userRN.tasksConcluidas.get(3);
+
+        System.out.println(task.getNome());
+
     }
 }
