@@ -5,8 +5,8 @@
  */
 package app;
 
-import br.ufpr.doit.conexao.Task;
-import br.ufpr.doit.conexao.Task_RN;
+import br.ufpr.doit.controls.ListRN;
+import br.ufpr.doit.model.Lista;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,32 +14,27 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         System.out.println("Just Do It!");
-        Task task = new Task();
-        Task_RN taskRn = new Task_RN();
+        Lista list = new Lista();
+        ListRN listRN = new ListRN();
+        List<Lista> listas = new ArrayList<>();
         
-        List<Task> tasks = new ArrayList<>();
-
-//        task.setNome("projeto final");
-//        task.setDescricao("sem criatividade para uma descricao");
-//        task.setConcluida("0");
-//        task.setFK_list("1");
-
-//        task.setPK_task("6");
-
-
-        System.out.println(taskRn.listarTasksBD(tasks));
+//        list.setPK_List("61");
+//        list.setNome("entrete");
+//        list.setFK_user("1");
         
-        task = tasks.get(0);
-        System.out.println(task.getNome());
-        System.out.println(task.getDescricao());
-        System.out.println(task.getConcluida());
-        task = tasks.get(1);
-        System.out.println(task.getNome());
-        System.out.println(task.getDescricao());
-        System.out.println(task.getConcluida());
-        task = tasks.get(2);
-        System.out.println(task.getNome());
-        System.out.println(task.getDescricao());
-        System.out.println(task.getConcluida());
+        System.out.println(listRN.listarListsBD(listas));
+        
+        list = listas.get(0);
+        System.out.println(list.getPK_List());
+        System.out.println(list.getNome());
+        System.out.println(list.getFK_user());
+        list = listas.get(1);
+        System.out.println(list.getPK_List());
+        System.out.println(list.getNome());
+        System.out.println(list.getFK_user());
+        list = listas.get(2);
+        System.out.println(list.getPK_List());
+        System.out.println(list.getNome());
+        System.out.println(list.getFK_user());
     }
 }
