@@ -7,6 +7,8 @@ package app;
 
 import br.ufpr.doit.controls.UserRN;
 import br.ufpr.doit.model.Task;
+import java.util.ArrayList;
+import java.util.List;
 
 public class App {
 
@@ -14,28 +16,29 @@ public class App {
         System.out.println("Just Do It!");
 
         UserRN userRN = new UserRN();
+        List<Task> xs = new ArrayList<>();
 
-        userRN.listarTasksConcluidas();
+        userRN.excluiTarefaConcluidas();
 
-        Task task = userRN.tasksConcluidas.get(0);
-
-        System.out.println(task.getNome());
-
-        task = userRN.tasksConcluidas.get(1);
-
-        System.out.println(task.getNome());
-
-        int x = userRN.tasksConcluidas.size();
-
-        System.out.println(x);
-
-        task = userRN.tasksConcluidas.get(2);
-
-        System.out.println(task.getNome());
-
-        task = userRN.tasksConcluidas.get(3);
-
-        System.out.println(task.getNome());
+//        Task task = xs.get(0);
+//
+//        System.out.println(task.getNome());
+//
+//        task = xs.get(1);
+//
+//        System.out.println(task.getNome());
+//
+//        int x = xs.size();
+//
+//        System.out.println(x);
+//
+//        task = xs.get(2);
+//
+//        System.out.println(task.getNome());
+//
+//        task = xs.get(3);
+//
+//        System.out.println(task.getNome());
 
     }
 }
