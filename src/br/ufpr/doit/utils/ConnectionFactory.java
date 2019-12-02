@@ -5,8 +5,6 @@ package br.ufpr.doit.utils;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
 import java.sql.Connection;
 
 import java.sql.DriverManager;
@@ -90,7 +88,7 @@ public class ConnectionFactory {
         pstmt = con.prepareStatement(sql);
         return pstmt;
     }
-    
+
     public static void closePstmt(PreparedStatement pstmt) throws SQLException {
         if (pstmt != null) {
             pstmt.close();

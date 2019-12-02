@@ -15,6 +15,9 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.sql.Time;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -22,10 +25,6 @@ import java.util.List;
  * @author ulisses
  */
 public class UserRN {
-    
-    public List<Task> tasksConcluidas = new ArrayList<>();
-    public List<Task> tasksAtrasadas = new ArrayList<>();
-    List<String> listasDesseUsuario = new ArrayList<>();
     
     public boolean inserir(User user) throws Exception {
         
@@ -269,7 +268,7 @@ public class UserRN {
         return true;
     }
     
-    public void listarTasksAtrasadas() throws Exception {
+    public boolean listarTasksAtrasadas(List<Task> tasks) throws Exception {
         Connection con = null;
         PreparedStatement stm = null;
         
@@ -279,38 +278,42 @@ public class UserRN {
                 + " `data_fim`, `tempo_execucao`, `FK_list` FROM `task`";
         
         try {
-            listasDesseUsuario.clear();
-            listaListasDoUsuario();
             
-            con = ConnectionFactory.getConexaoMySQL();
-            stm = ConnectionFactory.prepareStmt(con, sql);
-            
-            ResultSet rs = stm.executeQuery();
-            
-            while (rs.next()) {
-                if (verificaTaskUsuario(rs.getString("FK_list")) && atrasado(rs.getString("data_fim"))) {
-                    task = new Task();
-                    task.setPK_task(rs.getString("PK_task"));
-                    task.setNome(rs.getString("nome"));
-                    task.setDescricao(rs.getString("descricao"));
-                    task.setConcluida(rs.getString("concluida"));
-                    task.setData_inicio(rs.getString("data_inicio"));
-                    task.setData_fim(rs.getString("data_fim"));
-                    task.setTempo_execucao(rs.getString("tempo_execucao"));
-                    task.setFK_list(rs.getString("FK_list"));
-                    tasksAtrasadas.add(task);
+            List<String> pksListas = new ArrayList<>();
+            if (listaListasDoUsuario(pksListas)){
+                con = ConnectionFactory.getConexaoMySQL();
+                stm = ConnectionFactory.prepareStmt(con, sql);
+
+                ResultSet rs = stm.executeQuery();
+
+                while (rs.next()) {
+                    if (verificaTaskUsuario(rs.getString("FK_list"), pksListas) &&
+                            atrasado(rs.getString("data_fim"))) {
+                        task = new Task();
+                        task.setPK_task(rs.getString("PK_task"));
+                        task.setNome(rs.getString("nome"));
+                        task.setDescricao(rs.getString("descricao"));
+                        task.setConcluida(rs.getString("concluida"));
+                        task.setData_inicio(rs.getString("data_inicio"));
+                        task.setData_fim(rs.getString("data_fim"));
+                        task.setTempo_execucao(rs.getString("tempo_execucao"));
+                        task.setFK_list(rs.getString("FK_list"));
+                        tasks.add(task);
+                    }
                 }
             }
-            
+                        
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
         }
+        return true;
     }
     
-    public void listarTasksConcluidas() throws Exception {
+    public boolean listarTasksConcluidas(List<Task> tasks)throws Exception {
         Connection con = null;
         PreparedStatement stm = null;
         
@@ -320,38 +323,42 @@ public class UserRN {
                 + " `data_fim`, `tempo_execucao`, `FK_list` FROM `task`";
         
         try {
-            listasDesseUsuario.clear();
-            listaListasDoUsuario();
             
-            con = ConnectionFactory.getConexaoMySQL();
-            stm = ConnectionFactory.prepareStmt(con, sql);
-            
-            ResultSet rs = stm.executeQuery();
-            
-            while (rs.next()) {
-                if (verificaTaskUsuario(rs.getString("FK_list")) && concluida(rs.getString("concluida"))) {
-                    task = new Task();
-                    task.setPK_task(rs.getString("PK_task"));
-                    task.setNome(rs.getString("nome"));
-                    task.setDescricao(rs.getString("descricao"));
-                    task.setConcluida(rs.getString("concluida"));
-                    task.setData_inicio(rs.getString("data_inicio"));
-                    task.setData_fim(rs.getString("data_fim"));
-                    task.setTempo_execucao(rs.getString("tempo_execucao"));
-                    task.setFK_list(rs.getString("FK_list"));
-                    tasksConcluidas.add(task);
+            List<String> pksListas = new ArrayList<>();
+            if (listaListasDoUsuario(pksListas)){
+                con = ConnectionFactory.getConexaoMySQL();
+                stm = ConnectionFactory.prepareStmt(con, sql);
+
+                ResultSet rs = stm.executeQuery();
+
+                while (rs.next()) {
+                    if (verificaTaskUsuario(rs.getString("FK_list"), pksListas) &&
+                            concluida(rs.getString("concluida"))) {
+                        task = new Task();
+                        task.setPK_task(rs.getString("PK_task"));
+                        task.setNome(rs.getString("nome"));
+                        task.setDescricao(rs.getString("descricao"));
+                        task.setConcluida(rs.getString("concluida"));
+                        task.setData_inicio(rs.getString("data_inicio"));
+                        task.setData_fim(rs.getString("data_fim"));
+                        task.setTempo_execucao(rs.getString("tempo_execucao"));
+                        task.setFK_list(rs.getString("FK_list"));
+                        tasks.add(task);
+                    }
                 }
             }
-            
+                        
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         } finally {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
         }
+        return true;
     }
     
-    public void listaListasDoUsuario() throws Exception {
+    private boolean listaListasDoUsuario(List<String> x) throws Exception {
         
         String pkList;
         
@@ -369,21 +376,23 @@ public class UserRN {
             
             while (rs.next()) {
                 pkList = rs.getString("PK_List");
-                listasDesseUsuario.add(pkList);
+                x.add(pkList);
             }
             
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         } finally {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
         }
+        return true;
     }
     
-    private boolean verificaTaskUsuario(String x) {
+    private boolean verificaTaskUsuario(String x, List<String> y) {
         try {
-            for (int i = 0; i < listasDesseUsuario.size(); i++) {
-                if (listasDesseUsuario.get(i).equals(x)) {
+            for (int i = 0; i < y.size(); i++) {
+                if (y.get(i).equals(x)) {
                     return true;
                 }
             }
@@ -425,5 +434,64 @@ public class UserRN {
             e.printStackTrace();
         }
         return false;
+    }
+    
+    public LocalTime totalHorasConclusao () throws Exception{
+        
+        LocalTime times = LocalTime.of(0, 0, 0);
+        
+        
+        Connection con = null;
+        PreparedStatement stm = null;
+        
+        String sql = "SELECT `PK_task`, `nome`, `descricao`, `concluida`, `data_inicio`,"
+                + " `data_fim`, `tempo_execucao`, `FK_list` FROM `task`";
+        
+        try {
+            
+            List<String> pksListas = new ArrayList<>();
+            if (listaListasDoUsuario(pksListas)){
+                con = ConnectionFactory.getConexaoMySQL();
+                stm = ConnectionFactory.prepareStmt(con, sql);
+
+                ResultSet rs = stm.executeQuery();
+
+                while (rs.next()) {
+
+                    if (verificaTaskUsuario(rs.getString("FK_list"), pksListas) &&
+                        !(rs.getString("tempo_execucao") == null)) {
+                        
+                        SimpleDateFormat dtf = new SimpleDateFormat("HH:mm");
+                        Date date = dtf.parse(rs.getString("tempo_execucao"));
+                        Time t = new Time(date.getTime());
+                        LocalTime time = t.toLocalTime();
+                        times = times.plusHours(time.getHour()).plusMinutes(time.getMinute());
+                    }
+                }
+                return times;
+            }
+                        
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionFactory.FecharConexao();
+            ConnectionFactory.closePstmt(stm);
+        }
+        return null;
+    }
+    
+    public void excluiTarefaConcluidas() throws Exception{
+        List<Task> tasks = new ArrayList<>();
+        TaskRN taskRN = new TaskRN();
+        
+        try {        
+            listarTasksConcluidas(tasks);
+            for (int i = 0; i < tasks.size(); i++) {
+                taskRN.deletar(tasks.get(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
     }
 }
