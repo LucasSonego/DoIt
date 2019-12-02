@@ -8,6 +8,7 @@ package br.ufpr.doit.controls;
 import br.ufpr.doit.model.Task;
 import br.ufpr.doit.model.User;
 import br.ufpr.doit.utils.ConnectionFactory;
+import br.ufpr.doit.utils.SomaHorasString;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,9 +16,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.sql.Time;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -25,31 +23,31 @@ import java.util.List;
  * @author ulisses
  */
 public class UserRN {
-    
+
     public boolean inserir(User user) throws Exception {
-        
+
         Connection con = null;
         PreparedStatement stm = null;
-        
+
         String sql = "INSERT INTO `user`(`PK_user`, `nome`, `username`, `email`,"
                 + " `password`, `idade`, `create_time`)"
                 + " VALUES (NULL,?,?,?,?,?,current_timestamp())";
-        
+
         try {
             con = ConnectionFactory.getConexaoMySQL();
             stm = ConnectionFactory.prepareStmt(con, sql);
-            
+
             stm.setString(1, user.getNome());
             stm.setString(2, user.getUsername());
             stm.setString(3, user.getEmail());
             stm.setString(4, user.getPassword());
             stm.setString(5, user.getIdade());
-            
+
             stm.execute();
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
-            
+
             return false;
         } finally {
             ConnectionFactory.FecharConexao();
@@ -57,20 +55,20 @@ public class UserRN {
         }
         return true;
     }
-    
-    public boolean deletar(User user) throws Exception {
-        
+
+    public boolean deletar(String pk) throws Exception {
+
         Connection con = null;
         PreparedStatement stm = null;
-        
-        String sql = "DELETE FROM `user` WHERE `PK_user` = " + "'" + user.getPK_user() + "'";
-        
+
+        String sql = "DELETE FROM `user` WHERE `PK_user` = " + "'" + pk + "'";
+
         try {
             con = ConnectionFactory.getConexaoMySQL();
             stm = ConnectionFactory.prepareStmt(con, sql);
-            
+
             stm.execute();
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -80,20 +78,20 @@ public class UserRN {
         }
         return true;
     }
-    
+
     public boolean alterar(User user) throws Exception {
-        
+
         Connection con = null;
         PreparedStatement stm = null;
-        
+
         String sql = "UPDATE `user` SET `PK_user`= ?,`nome`= ?,`username`=?,"
                 + "`email`= ? ,`password`= ?,`idade`= ?,`create_time`= ?"
                 + " WHERE `PK_user` = ?";
-        
+
         try {
             con = ConnectionFactory.getConexaoMySQL();
             stm = ConnectionFactory.prepareStmt(con, sql);
-            
+
             stm.setString(1, user.getPK_user());
             stm.setString(2, user.getNome());
             stm.setString(3, user.getUsername());
@@ -102,9 +100,9 @@ public class UserRN {
             stm.setString(6, user.getIdade());
             stm.setString(7, user.getCrete_time());
             stm.setString(8, user.getPK_user());
-            
+
             stm.execute();
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -114,23 +112,23 @@ public class UserRN {
         }
         return true;
     }
-    
+
     public boolean buscarUsername(User user) throws Exception {
-        
+
         Connection con = null;
         PreparedStatement stm = null;
-        
+
         String sql = "SELECT `PK_user`, `nome`, `username`, `email`, `password`,"
                 + " `idade`, `create_time` FROM `user` WHERE `username`= ?";
-        
+
         try {
             con = ConnectionFactory.getConexaoMySQL();
             stm = ConnectionFactory.prepareStmt(con, sql);
-            
+
             stm.setString(1, user.getUsername());
-            
+
             ResultSet rs = stm.executeQuery();
-            
+
             while (rs.next()) {
                 user.setPK_user(rs.getString("PK_user"));
                 user.setNome(rs.getString("nome"));
@@ -139,9 +137,9 @@ public class UserRN {
                 user.setPassword(rs.getString("password"));
                 user.setIdade(rs.getString("idade"));
                 user.setCrete_time(rs.getString("create_time"));
-                
+
             }
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -151,23 +149,23 @@ public class UserRN {
         }
         return true;
     }
-    
+
     public boolean buscarPkUser(User user) throws Exception {
-        
+
         Connection con = null;
         PreparedStatement stm = null;
-        
+
         String sql = "SELECT `PK_user`, `nome`, `username`, `email`, `password`,"
                 + " `idade`, `create_time` FROM `user` WHERE `PK_user`= ?";
-        
+
         try {
             con = ConnectionFactory.getConexaoMySQL();
             stm = ConnectionFactory.prepareStmt(con, sql);
-            
+
             stm.setString(1, user.getPK_user());
-            
+
             ResultSet rs = stm.executeQuery();
-            
+
             while (rs.next()) {
                 user.setPK_user(rs.getString("PK_user"));
                 user.setNome(rs.getString("nome"));
@@ -177,7 +175,7 @@ public class UserRN {
                 user.setIdade(rs.getString("idade"));
                 user.setCrete_time(rs.getString("create_time"));
             }
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -187,23 +185,23 @@ public class UserRN {
         }
         return true;
     }
-    
+
     public boolean login(User user) throws Exception {
-        
+
         Connection con = null;
         PreparedStatement stm = null;
-        
+
         String sql = "SELECT `PK_user`, `nome`, `username`, `email`, `password`,"
                 + " `idade`, `create_time` FROM `user` WHERE `username`= ?";
-        
+
         try {
             con = ConnectionFactory.getConexaoMySQL();
             stm = ConnectionFactory.prepareStmt(con, sql);
-            
+
             stm.setString(1, user.getUsername());
-            
+
             ResultSet rs = stm.executeQuery();
-            
+
             while (rs.next()) {
                 if (user.getPassword().equals(rs.getString("password"))) {
                     user.setPK_user(rs.getString("PK_user"));
@@ -215,37 +213,37 @@ public class UserRN {
                     user.setCrete_time(rs.getString("create_time"));
                     return true;
                 }
-                
+
                 throw new Exception("senha errada");
-                
+
             }
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
-            
+
         } finally {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
         }
         return false;
     }
-    
+
     public boolean listarUserBD(List<User> users) throws Exception {
-        
+
         User user = new User();
-        
+
         Connection con = null;
         PreparedStatement stm = null;
-        
+
         String sql = "SELECT `PK_user`, `nome`, `username`, `email`, `password`,"
                 + " `idade`, `create_time` FROM `user`";
-        
+
         try {
             con = ConnectionFactory.getConexaoMySQL();
             stm = ConnectionFactory.prepareStmt(con, sql);
-            
+
             ResultSet rs = stm.executeQuery();
-            
+
             while (rs.next()) {
                 user = new User();
                 user.setPK_user(rs.getString("PK_user"));
@@ -257,7 +255,7 @@ public class UserRN {
                 user.setCrete_time(rs.getString("create_time"));
                 users.add(user);
             }
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -267,28 +265,28 @@ public class UserRN {
         }
         return true;
     }
-    
-    public boolean listarTasksAtrasadas(List<Task> tasks) throws Exception {
+
+    public boolean listarTasksAtrasadas(List<Task> tasks, User user) throws Exception {
         Connection con = null;
         PreparedStatement stm = null;
-        
+
         Task task = new Task();
-        
+
         String sql = "SELECT `PK_task`, `nome`, `descricao`, `concluida`, `data_inicio`,"
                 + " `data_fim`, `tempo_execucao`, `FK_list` FROM `task`";
-        
+
         try {
-            
+
             List<String> pksListas = new ArrayList<>();
-            if (listaListasDoUsuario(pksListas)){
+            if (listaListasDoUsuario(pksListas, user.getPK_user())) {
                 con = ConnectionFactory.getConexaoMySQL();
                 stm = ConnectionFactory.prepareStmt(con, sql);
 
                 ResultSet rs = stm.executeQuery();
 
                 while (rs.next()) {
-                    if (verificaTaskUsuario(rs.getString("FK_list"), pksListas) &&
-                            atrasado(rs.getString("data_fim"))) {
+                    if (verificaTaskUsuario(rs.getString("FK_list"), pksListas)
+                            && atrasado(rs.getString("data_fim"))) {
                         task = new Task();
                         task.setPK_task(rs.getString("PK_task"));
                         task.setNome(rs.getString("nome"));
@@ -302,7 +300,7 @@ public class UserRN {
                     }
                 }
             }
-                        
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -312,28 +310,28 @@ public class UserRN {
         }
         return true;
     }
-    
-    public boolean listarTasksConcluidas(List<Task> tasks)throws Exception {
+
+    public boolean listarTasksConcluidas(List<Task> tasks, User user) throws Exception {
         Connection con = null;
         PreparedStatement stm = null;
-        
+
         Task task = new Task();
-        
+
         String sql = "SELECT `PK_task`, `nome`, `descricao`, `concluida`, `data_inicio`,"
                 + " `data_fim`, `tempo_execucao`, `FK_list` FROM `task`";
-        
+
         try {
-            
+
             List<String> pksListas = new ArrayList<>();
-            if (listaListasDoUsuario(pksListas)){
+            if (listaListasDoUsuario(pksListas, user.getPK_user())) {
                 con = ConnectionFactory.getConexaoMySQL();
                 stm = ConnectionFactory.prepareStmt(con, sql);
 
                 ResultSet rs = stm.executeQuery();
 
                 while (rs.next()) {
-                    if (verificaTaskUsuario(rs.getString("FK_list"), pksListas) &&
-                            concluida(rs.getString("concluida"))) {
+                    if (verificaTaskUsuario(rs.getString("FK_list"), pksListas)
+                            && concluida(rs.getString("concluida"))) {
                         task = new Task();
                         task.setPK_task(rs.getString("PK_task"));
                         task.setNome(rs.getString("nome"));
@@ -347,7 +345,7 @@ public class UserRN {
                     }
                 }
             }
-                        
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -357,28 +355,29 @@ public class UserRN {
         }
         return true;
     }
-    
-    private boolean listaListasDoUsuario(List<String> x) throws Exception {
-        
+
+    public boolean listaListasDoUsuario(List<String> x, String pk) throws Exception {
+
         String pkList;
-        
+
         Connection con = null;
         PreparedStatement stm = null;
-        
-        String sql = "SELECT `PK_List`, `nome`, `FK_user` FROM `List`";
-        
+
+        String sql = "SELECT `PK_List`, `nome`, `FK_user` FROM `List` WHERE FK_user =  ?";
+
         try {
-            
+
             con = ConnectionFactory.getConexaoMySQL();
             stm = ConnectionFactory.prepareStmt(con, sql);
-            
+
+            stm.setString(1, pk);
+
             ResultSet rs = stm.executeQuery();
-            
+
             while (rs.next()) {
-                pkList = rs.getString("PK_List");
-                x.add(pkList);
+                x.add(rs.getString("PK_List"));
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -388,7 +387,7 @@ public class UserRN {
         }
         return true;
     }
-    
+
     private boolean verificaTaskUsuario(String x, List<String> y) {
         try {
             for (int i = 0; i < y.size(); i++) {
@@ -401,7 +400,7 @@ public class UserRN {
         }
         return false;
     }
-    
+
     private boolean atrasado(String x) {
         try {
             if (x == null) {
@@ -409,7 +408,7 @@ public class UserRN {
             } else {
                 SimpleDateFormat dtf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date date = dtf.parse(x);
-                
+
                 Date datehj = new Date();
                 int result = datehj.compareTo(date);
                 if (result >= 0) {
@@ -417,13 +416,13 @@ public class UserRN {
                 }
                 return false;
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
-    
+
     private boolean concluida(String x) {
         try {
             if (x.equals("1")) {
@@ -435,42 +434,37 @@ public class UserRN {
         }
         return false;
     }
-    
-    public LocalTime totalHorasConclusao () throws Exception{
-        
-        LocalTime times = LocalTime.of(0, 0, 0);
-        
-        
+
+    public String totalHorasConclusao(User user) throws Exception {
+
+        String times = null;
+
         Connection con = null;
         PreparedStatement stm = null;
-        
+
         String sql = "SELECT `PK_task`, `nome`, `descricao`, `concluida`, `data_inicio`,"
                 + " `data_fim`, `tempo_execucao`, `FK_list` FROM `task`";
-        
+
         try {
-            
+
             List<String> pksListas = new ArrayList<>();
-            if (listaListasDoUsuario(pksListas)){
+            if (listaListasDoUsuario(pksListas, user.getPK_user())) {
                 con = ConnectionFactory.getConexaoMySQL();
                 stm = ConnectionFactory.prepareStmt(con, sql);
 
                 ResultSet rs = stm.executeQuery();
 
                 while (rs.next()) {
+                    if (verificaTaskUsuario(rs.getString("FK_list"), pksListas)
+                            && rs.getString("tempo_execucao") != null) {
 
-                    if (verificaTaskUsuario(rs.getString("FK_list"), pksListas) &&
-                        !(rs.getString("tempo_execucao") == null)) {
-                        
-                        SimpleDateFormat dtf = new SimpleDateFormat("HH:mm");
-                        Date date = dtf.parse(rs.getString("tempo_execucao"));
-                        Time t = new Time(date.getTime());
-                        LocalTime time = t.toLocalTime();
-                        times = times.plusHours(time.getHour()).plusMinutes(time.getMinute());
+                        SomaHorasString shs = new SomaHorasString();
+                        times = shs.somaHorasString(times, rs.getString("tempo_execucao"));
                     }
                 }
                 return times;
             }
-                        
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -479,19 +473,19 @@ public class UserRN {
         }
         return null;
     }
-    
-    public void excluiTarefaConcluidas() throws Exception{
+
+    public void excluiTarefaConcluidas(User user) throws Exception {
         List<Task> tasks = new ArrayList<>();
         TaskRN taskRN = new TaskRN();
-        
-        try {        
-            listarTasksConcluidas(tasks);
+
+        try {
+            listarTasksConcluidas(tasks, user);
             for (int i = 0; i < tasks.size(); i++) {
-                taskRN.deletar(tasks.get(i));
+                taskRN.deletar(tasks.get(i).getPK_task());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
     }
 }

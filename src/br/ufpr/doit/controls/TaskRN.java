@@ -19,7 +19,7 @@ import java.sql.Connection;
  */
 public class TaskRN {
 
-    public boolean inserir(Task task) throws Exception {
+    public boolean inserir(Task task, List<String> fkList) throws Exception {
 
         Connection con = null;
         PreparedStatement stm = null;
@@ -29,19 +29,23 @@ public class TaskRN {
                 + " `FK_list`) VALUES (NULL,?,?,?,?,?,?,?)";
 
         try {
-            con = ConnectionFactory.getConexaoMySQL();
-            stm = ConnectionFactory.prepareStmt(con, sql);
+            
+            if (verificaTaskLista(fkList, task.getFK_list())){
+                con = ConnectionFactory.getConexaoMySQL();
+                stm = ConnectionFactory.prepareStmt(con, sql);
 
-            stm.setString(1, task.getNome());
-            stm.setString(2, task.getDescricao());
-            stm.setString(3, task.getConcluida());
-            stm.setString(4, task.getData_inicio());
-            stm.setString(5, task.getData_fim());
-            stm.setString(6, task.getTempo_execucao());
-            stm.setString(7, task.getFK_list());
+                stm.setString(1, task.getNome());
+                stm.setString(2, task.getDescricao());
+                stm.setString(3, task.getConcluida());
+                stm.setString(4, task.getData_inicio());
+                stm.setString(5, task.getData_fim());
+                stm.setString(6, task.getTempo_execucao());
+                stm.setString(7, task.getFK_list());
 
-            stm.execute();
-
+                stm.execute();
+            }else{
+                return false;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -52,19 +56,19 @@ public class TaskRN {
         return true;
     }
 
-    public boolean deletar(Task task) throws Exception {
+    public boolean deletar(String pk) throws Exception {
 
         Connection con = null;
         PreparedStatement stm = null;
 
-        String sql = "DELETE FROM `task` WHERE `PK_task` = " + "'" + task.getPK_task() + "'";
+        String sql = "DELETE FROM `task` WHERE `PK_task` = " + "'" + pk + "'";
 
         try {
+            
             con = ConnectionFactory.getConexaoMySQL();
             stm = ConnectionFactory.prepareStmt(con, sql);
 
             stm.execute();
-
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -75,7 +79,7 @@ public class TaskRN {
         return true;
     }
 
-    public boolean alterar(Task task) throws Exception {
+    public boolean alterar(Task task, List<String> fkList) throws Exception {
 
         Connection con = null;
         PreparedStatement stm = null;
@@ -86,21 +90,25 @@ public class TaskRN {
                 + " WHERE `PK_task` = ?";
 
         try {
-            con = ConnectionFactory.getConexaoMySQL();
-            stm = ConnectionFactory.prepareStmt(con, sql);
+            
+            if (verificaTaskLista(fkList, task.getFK_list())){
+                con = ConnectionFactory.getConexaoMySQL();
+                stm = ConnectionFactory.prepareStmt(con, sql);
 
-            stm.setString(1, task.getPK_task());
-            stm.setString(2, task.getNome());
-            stm.setString(3, task.getDescricao());
-            stm.setString(4, task.getConcluida());
-            stm.setString(5, task.getData_inicio());
-            stm.setString(6, task.getData_fim());
-            stm.setString(7, task.getTempo_execucao());
-            stm.setString(8, task.getFK_list());
-            stm.setString(9, task.getPK_task());
+                stm.setString(1, task.getPK_task());
+                stm.setString(2, task.getNome());
+                stm.setString(3, task.getDescricao());
+                stm.setString(4, task.getConcluida());
+                stm.setString(5, task.getData_inicio());
+                stm.setString(6, task.getData_fim());
+                stm.setString(7, task.getTempo_execucao());
+                stm.setString(8, task.getFK_list());
+                stm.setString(9, task.getPK_task());
 
-            stm.execute();
-
+                stm.execute();
+            }else{
+                return false;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -111,7 +119,7 @@ public class TaskRN {
         return true;
     }
 
-    public boolean buscarNome(Task task) throws Exception {
+    public boolean buscarNome(Task task, List<String> fkList) throws Exception {
 
         Connection con = null;
         PreparedStatement stm = null;
@@ -121,6 +129,8 @@ public class TaskRN {
                 + " WHERE `nome` = ?";
 
         try {
+            
+        
             con = ConnectionFactory.getConexaoMySQL();
             stm = ConnectionFactory.prepareStmt(con, sql);
 
@@ -129,16 +139,19 @@ public class TaskRN {
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
-                task.setPK_task(rs.getString("PK_task"));
-                task.setNome(rs.getString("nome"));
-                task.setDescricao(rs.getString("descricao"));
-                task.setConcluida(rs.getString("concluida"));
-                task.setData_inicio(rs.getString("data_inicio"));
-                task.setData_fim(rs.getString("data_fim"));
-                task.setTempo_execucao(rs.getString("tempo_execucao"));
-                task.setFK_list(rs.getString("FK_list"));
+                if (verificaTaskLista(fkList, rs.getString("FK_List"))){
+                    task.setPK_task(rs.getString("PK_task"));
+                    task.setNome(rs.getString("nome"));
+                    task.setDescricao(rs.getString("descricao"));
+                    task.setConcluida(rs.getString("concluida"));
+                    task.setData_inicio(rs.getString("data_inicio"));
+                    task.setData_fim(rs.getString("data_fim"));
+                    task.setTempo_execucao(rs.getString("tempo_execucao"));
+                    task.setFK_list(rs.getString("FK_list"));
+                }else{
+                    return false;
+                }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -149,7 +162,7 @@ public class TaskRN {
         return true;
     }
 
-    public boolean buscarPkTask(Task task) throws Exception {
+    public boolean buscarPkTask(Task task, List<String> fkList) throws Exception {
 
         Connection con = null;
         PreparedStatement stm = null;
@@ -159,6 +172,7 @@ public class TaskRN {
                 + " WHERE `PK_task` = ?";
 
         try {
+            
             con = ConnectionFactory.getConexaoMySQL();
             stm = ConnectionFactory.prepareStmt(con, sql);
 
@@ -167,15 +181,21 @@ public class TaskRN {
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
-                task.setPK_task(rs.getString("PK_task"));
-                task.setNome(rs.getString("nome"));
-                task.setDescricao(rs.getString("descricao"));
-                task.setConcluida(rs.getString("concluida"));
-                task.setData_inicio(rs.getString("data_inicio"));
-                task.setData_fim(rs.getString("data_fim"));
-                task.setTempo_execucao(rs.getString("tempo_execucao"));
-                task.setFK_list(rs.getString("FK_list"));
+                if (verificaTaskLista(fkList, rs.getString("FK_List"))){
+                    task.setPK_task(rs.getString("PK_task"));
+                    task.setNome(rs.getString("nome"));
+                    task.setDescricao(rs.getString("descricao"));
+                    task.setConcluida(rs.getString("concluida"));
+                    task.setData_inicio(rs.getString("data_inicio"));
+                    task.setData_fim(rs.getString("data_fim"));
+                    task.setTempo_execucao(rs.getString("tempo_execucao"));
+                    task.setFK_list(rs.getString("FK_list"));
+                }else{
+                    return false;
+                }
+
             }
+            
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -187,7 +207,7 @@ public class TaskRN {
         return true;
     }
 
-    public boolean listarTasksBD(List<Task> tasks) throws Exception {
+    public boolean listarTasksBD(List<Task> tasks, List<String> fkList) throws Exception {
 
         Task task = new Task();
 
@@ -198,22 +218,26 @@ public class TaskRN {
                 + " `data_fim`, `tempo_execucao`, `FK_list` FROM `task`";
 
         try {
+
             con = ConnectionFactory.getConexaoMySQL();
             stm = ConnectionFactory.prepareStmt(con, sql);
 
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
-                task = new Task();
-                task.setPK_task(rs.getString("PK_task"));
-                task.setNome(rs.getString("nome"));
-                task.setDescricao(rs.getString("descricao"));
-                task.setConcluida(rs.getString("concluida"));
-                task.setData_inicio(rs.getString("data_inicio"));
-                task.setData_fim(rs.getString("data_fim"));
-                task.setTempo_execucao(rs.getString("tempo_execucao"));
-                task.setFK_list(rs.getString("FK_list"));
-                tasks.add(task);
+                if (verificaTaskLista(fkList, rs.getString("FK_List"))){
+                    task = new Task();
+                    task.setPK_task(rs.getString("PK_task"));
+                    task.setNome(rs.getString("nome"));
+                    task.setDescricao(rs.getString("descricao"));
+                    task.setConcluida(rs.getString("concluida"));
+                    task.setData_inicio(rs.getString("data_inicio"));
+                    task.setData_fim(rs.getString("data_fim"));
+                    task.setTempo_execucao(rs.getString("tempo_execucao"));
+                    task.setFK_list(rs.getString("FK_list"));
+                    tasks.add(task);
+                }
+                
             }
 
         } catch (SQLException e) {
@@ -225,4 +249,18 @@ public class TaskRN {
         }
         return true;
     }
+    
+    private boolean verificaTaskLista(List<String> x, String y){
+        try {
+            for (int i = 0; i < x.size(); i++) {
+                if (x.get(i).equals(y)){
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    } 
 }
