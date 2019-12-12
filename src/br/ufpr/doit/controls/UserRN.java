@@ -263,7 +263,7 @@ public class UserRN {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
         }
-        return true;
+        return false;
     }
 
     public boolean listarTasksAtrasadas(List<Task> tasks, User user) throws Exception {
@@ -273,7 +273,7 @@ public class UserRN {
         Task task = new Task();
 
         String sql = "SELECT `PK_task`, `nome`, `descricao`, `concluida`, `data_inicio`,"
-                + " `data_fim`, `tempo_execucao`, `FK_list` FROM `task`";
+                + " `data_fim`, `tempo_execucao`, `FK_list`, `importante` FROM `task`";
 
         try {
 
@@ -296,6 +296,7 @@ public class UserRN {
                         task.setData_fim(rs.getString("data_fim"));
                         task.setTempo_execucao(rs.getString("tempo_execucao"));
                         task.setFK_list(rs.getString("FK_list"));
+                        task.setImportante(rs.getString("importante"));
                         tasks.add(task);
                     }
                 }
@@ -308,7 +309,53 @@ public class UserRN {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
         }
-        return true;
+        return false;
+    }
+    
+    public boolean listarTasksImportantes(List<Task> tasks, User user) throws Exception {
+        Connection con = null;
+        PreparedStatement stm = null;
+
+        Task task = new Task();
+
+        String sql = "SELECT `PK_task`, `nome`, `descricao`, `concluida`, `data_inicio`,"
+                + " `data_fim`, `tempo_execucao`, `FK_list`, `importante` FROM `task`";
+
+        try {
+
+            List<String> pksListas = new ArrayList<>();
+            if (listaListasDoUsuario(pksListas, user.getPK_user())) {
+                con = ConnectionFactory.getConexaoMySQL();
+                stm = ConnectionFactory.prepareStmt(con, sql);
+
+                ResultSet rs = stm.executeQuery();
+
+                while (rs.next()) {
+                    if (verificaTaskUsuario(rs.getString("FK_list"), pksListas)
+                            && verificaTaskImporante(rs.getString("importante"))) {
+                        task = new Task();
+                        task.setPK_task(rs.getString("PK_task"));
+                        task.setNome(rs.getString("nome"));
+                        task.setDescricao(rs.getString("descricao"));
+                        task.setConcluida(rs.getString("concluida"));
+                        task.setData_inicio(rs.getString("data_inicio"));
+                        task.setData_fim(rs.getString("data_fim"));
+                        task.setTempo_execucao(rs.getString("tempo_execucao"));
+                        task.setFK_list(rs.getString("FK_list"));
+                        task.setImportante(rs.getString("importante"));
+                        tasks.add(task);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            ConnectionFactory.FecharConexao();
+            ConnectionFactory.closePstmt(stm);
+        }
+        return false;
     }
 
     public boolean listarTasksConcluidas(List<Task> tasks, User user) throws Exception {
@@ -318,7 +365,7 @@ public class UserRN {
         Task task = new Task();
 
         String sql = "SELECT `PK_task`, `nome`, `descricao`, `concluida`, `data_inicio`,"
-                + " `data_fim`, `tempo_execucao`, `FK_list` FROM `task`";
+                + " `data_fim`, `tempo_execucao`, `FK_list`, `importante` FROM `task`";
 
         try {
 
@@ -341,6 +388,7 @@ public class UserRN {
                         task.setData_fim(rs.getString("data_fim"));
                         task.setTempo_execucao(rs.getString("tempo_execucao"));
                         task.setFK_list(rs.getString("FK_list"));
+                        task.setImportante(rs.getString("importante"));
                         tasks.add(task);
                     }
                 }
@@ -353,7 +401,7 @@ public class UserRN {
             ConnectionFactory.FecharConexao();
             ConnectionFactory.closePstmt(stm);
         }
-        return true;
+        return false;
     }
 
     public boolean listaListasDoUsuario(List<String> x, String pk) throws Exception {
@@ -395,6 +443,18 @@ public class UserRN {
                     return true;
                 }
             }
+        } catch (Exception e) {
+            e.getMessage();
+        }
+        return false;
+    }
+    
+    private boolean verificaTaskImporante(String x){
+        try {
+            if(x.equals("1")){
+                return true;
+            }
+            return false;
         } catch (Exception e) {
             e.getMessage();
         }
@@ -443,7 +503,7 @@ public class UserRN {
         PreparedStatement stm = null;
 
         String sql = "SELECT `PK_task`, `nome`, `descricao`, `concluida`, `data_inicio`,"
-                + " `data_fim`, `tempo_execucao`, `FK_list` FROM `task`";
+                + " `data_fim`, `tempo_execucao`, `FK_list`, `importante` FROM `task`";
 
         try {
 
