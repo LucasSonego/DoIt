@@ -26,7 +26,7 @@ public class TaskRN {
 
         String sql = "INSERT INTO `task` (`PK_task`, `nome`, `descricao`,"
                 + " `concluida`, `data_inicio`, `data_fim`, `tempo_execucao`,"
-                + " `FK_list`) VALUES (NULL,?,?,?,?,?,?,?)";
+                + " `FK_list`, `importante` ) VALUES (NULL,?,?,?,?,?,?,?,?)";
 
         try {
             
@@ -41,6 +41,7 @@ public class TaskRN {
                 stm.setString(5, task.getData_fim());
                 stm.setString(6, task.getTempo_execucao());
                 stm.setString(7, task.getFK_list());
+                stm.setString(8, task.getImportante());
 
                 stm.execute();
             }else{
@@ -86,7 +87,7 @@ public class TaskRN {
 
         String sql = "UPDATE `task` SET `PK_task`= ?,`nome`= ?,"
                 + "`descricao`= ?,`concluida`= ?,`data_inicio`= ?,"
-                + "`data_fim`= ?,`tempo_execucao`= ?,`FK_list`= ?"
+                + "`data_fim`= ?,`tempo_execucao`= ?,`FK_list`= ? , `importante` = ?"
                 + " WHERE `PK_task` = ?";
 
         try {
@@ -103,7 +104,8 @@ public class TaskRN {
                 stm.setString(6, task.getData_fim());
                 stm.setString(7, task.getTempo_execucao());
                 stm.setString(8, task.getFK_list());
-                stm.setString(9, task.getPK_task());
+                stm.setString(9, task.getImportante());
+                stm.setString(10, task.getPK_task());
 
                 stm.execute();
             }else{
@@ -125,7 +127,7 @@ public class TaskRN {
         PreparedStatement stm = null;
 
         String sql = "SELECT `PK_task`, `nome`, `descricao`, `concluida`, `data_inicio`,"
-                + " `data_fim`, `tempo_execucao`, `FK_list` FROM `task`"
+                + " `data_fim`, `tempo_execucao`, `FK_list`, `importante` FROM `task`"
                 + " WHERE `nome` = ?";
 
         try {
@@ -148,6 +150,7 @@ public class TaskRN {
                     task.setData_fim(rs.getString("data_fim"));
                     task.setTempo_execucao(rs.getString("tempo_execucao"));
                     task.setFK_list(rs.getString("FK_list"));
+                    task.setImportante(rs.getString("importante"));
                 }else{
                     return false;
                 }
@@ -168,7 +171,7 @@ public class TaskRN {
         PreparedStatement stm = null;
 
         String sql = "SELECT `PK_task`, `nome`, `descricao`, `concluida`, `data_inicio`,"
-                + " `data_fim`, `tempo_execucao`, `FK_list` FROM `task`"
+                + " `data_fim`, `tempo_execucao`, `FK_list`, `importante` FROM `task`"
                 + " WHERE `PK_task` = ?";
 
         try {
@@ -190,6 +193,7 @@ public class TaskRN {
                     task.setData_fim(rs.getString("data_fim"));
                     task.setTempo_execucao(rs.getString("tempo_execucao"));
                     task.setFK_list(rs.getString("FK_list"));
+                    task.setImportante(rs.getString("importante"));
                 }else{
                     return false;
                 }
@@ -215,7 +219,7 @@ public class TaskRN {
         PreparedStatement stm = null;
 
         String sql = "SELECT `PK_task`, `nome`, `descricao`, `concluida`, `data_inicio`,"
-                + " `data_fim`, `tempo_execucao`, `FK_list` FROM `task`";
+                + " `data_fim`, `tempo_execucao`, `FK_list`, `importante` FROM `task`";
 
         try {
 
@@ -235,6 +239,7 @@ public class TaskRN {
                     task.setData_fim(rs.getString("data_fim"));
                     task.setTempo_execucao(rs.getString("tempo_execucao"));
                     task.setFK_list(rs.getString("FK_list"));
+                    task.setImportante(rs.getString("importante"));
                     tasks.add(task);
                 }
                 

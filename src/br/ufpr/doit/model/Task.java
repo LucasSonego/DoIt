@@ -19,6 +19,7 @@ public class Task {
     private String data_fim;
     private String tempo_execucao;
     private String FK_list;
+    private String importante;
 
     public String getPK_task() {
         return PK_task;
@@ -82,6 +83,14 @@ public class Task {
 
     public void setFK_list(String FK_list) {
         this.FK_list = FK_list;
+    }
+
+    public String getImportante() {
+        return importante;
+    }
+
+    public void setImportante(String importante) {
+        this.importante = importante;
     }
 
 }
