@@ -28,22 +28,26 @@ public class App {
         
         List<Task> tasks = new ArrayList<>();
         
-        List<String> x = new ArrayList();
-        userRN.listaListasDoUsuario(x, "1");
-        System.out.println(x.get(0));
-        System.out.println(x.get(1));
-
-        task.setNome("final");
-//        task.setDescricao("aeifvbuadgfuoadnk;adlgno");
-//        task.setConcluida("0");
-//        task.setFK_list("59");
-
-        System.out.println(taskRN.listarTasksBD(tasks, x));
+        list.setNome("Tesadsadas");
+        list.setPK_List("3");
         
-        System.out.println(tasks.get(0).getNome());
-        System.out.println(tasks.get(1).getNome());
-        System.out.println(tasks.get(2).getNome());
-        System.out.println(tasks.size());
+        listRN.inserir(list, user);
+//        List<String> x = new ArrayList();
+//        userRN.listaListasDoUsuario(x, "1");
+//        System.out.println(x.get(0));
+//        System.out.println(x.get(1));
+//
+//        task.setNome("final");
+////        task.setDescricao("aeifvbuadgfuoadnk;adlgno");
+////        task.setConcluida("0");
+////        task.setFK_list("59");
+//
+//        System.out.println(taskRN.listarTasksBD(tasks, x));
+//        
+//        System.out.println(tasks.get(0).getNome());
+//        System.out.println(tasks.get(1).getNome());
+//        System.out.println(tasks.get(2).getNome());
+//        System.out.println(tasks.size());
 
 
     }
