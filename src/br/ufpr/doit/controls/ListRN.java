@@ -185,7 +185,7 @@ public class ListRN {
         Connection con = null;
         PreparedStatement stm = null;
 
-        String sql = "SELECT `PK_List`, `nome`, `FK_user` FROM `List`";
+        String sql = "SELECT `PK_List`, `nome`, `FK_user` FROM `List` WHERE FK_user = " + user.getPK_user() + ";";
 
         try {
             con = ConnectionFactory.getConexaoMySQL();
@@ -194,13 +194,11 @@ public class ListRN {
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
-                if (verificaUsuario(user.getPK_user(), list.getFK_user())) {
-                    list = new Lista();
-                    list.setPK_List(rs.getString("PK_list"));
-                    list.setNome(rs.getString("nome"));
-                    list.setFK_user(rs.getString("FK_user"));
-                    lists.add(list);
-                }
+                list = new Lista();
+                list.setPK_List(rs.getString("PK_list"));
+                list.setNome(rs.getString("nome"));
+                list.setFK_user(rs.getString("FK_user"));
+                lists.add(list);
             }
 
         } catch (SQLException e) {
